@@ -4,7 +4,7 @@
 
 const responsiveWarning = document.getElementById("responsive-warning");
 // "true" if the site is optimized for responsive design, "false" if not.
-const responsiveDesign = false;
+const responsiveDesign = true;
 
 // Show mobile warning if the user is on mobile and responsive-design is false.
 if (!responsiveDesign && window.innerWidth <= 768) {
@@ -21,10 +21,14 @@ const toggleModeBtn = document.getElementById("toggle-mode-btn");
 const portfolioLink = document.getElementById("portfolio-link");
 const body = document.body;
 
+let currentMode = "light-mode";
+
 // Function to apply mode.
 function applyMode(mode) {
   body.classList.remove("light-mode", "dark-mode");
   body.classList.add(mode);
+
+  currentMode = mode;
 
   if (mode === "dark-mode") {
     // Set dark mode styles.
@@ -124,8 +128,13 @@ function setup() {
 
 // Draw and animate the galaxy.
 function draw() {
-  // Create a faint trail effect.
-  background(0, 0, 0, 20);
+  // Set the background depending on the current mode.
+  if (currentMode === "dark-mode") {
+    background(0, 0, 0, 20);
+  } else {
+    background(0, 0, 100, 20);
+  }
+
   ambientLight(255);
 
   // Adjust camera position and angle.
@@ -147,7 +156,14 @@ function draw() {
 
     push();
     translate(x, y, star.depthZ);
-    fill(star.hue, star.saturation, star.brightness * twinkle, 100 * depthFade);
+
+    // Adjust star color depending on the current mode.
+    if (currentMode === "dark-mode") {
+      fill(star.hue, star.saturation, star.brightness * twinkle, 100 * depthFade);
+    } else {
+      fill(30, 80, 60 * twinkle, 100 * depthFade);
+    }
+
     sphere(star.starSize * depthFade);
     pop();
 
@@ -169,7 +185,14 @@ function draw() {
   // Draw the galactic core.
   push();
   noStroke();
-  fill(255, 255, 255, 255);
+
+  // Adjust core color depending on the mode.
+  if (currentMode === "dark-mode") {
+    fill(255, 255, 255, 255);
+  } else {
+    fill(0, 0, 0, 255);
+  }
+
   sphere(25);
   pop();
 }
