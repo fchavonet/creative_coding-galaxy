@@ -19,8 +19,7 @@ Offer a visually immersive experience with minimal code dependencies.
 ![CSS3 badge](https://img.shields.io/badge/CSS3-1572b6?logo=css&logoColor=white&style=for-the-badge)
 ![HTML5 badge](https://img.shields.io/badge/HTML5-e34f26?logo=html5&logoColor=white&style=for-the-badge)
 ![JavaScript badge](https://img.shields.io/badge/JAVASCRIPT-f7df1e?logo=javascript&logoColor=black&style=for-the-badge)
-![p5.js badge](https://img.shields.io/badge/P5.JS-ed225d?logo=p5dotjs&logoColor=black&style=for-the-badge)
-
+![p5.js badge](https://img.shields.io/badge/P5.JS-ed225d?logo=p5dotjs&logoColor=white&style=for-the-badge)
 
 ## File Description
 
