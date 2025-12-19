@@ -1,77 +1,35 @@
-/*********************
-* RESPONSIVE WARNING *
-*********************/
+/******************************
+* RESPONSIVE WARNING BEHAVIOR *
+******************************/
 
 const responsiveWarning = document.getElementById("responsive-warning");
-// "true" if the site is optimized for responsive design, "false" if not.
-const responsiveDesign = true;
+// Enable/disable responsive warning.
+const responsiveDesign = false;
+// Mobile width limit.
+const threshold = 768;
 
-// Show mobile warning if the user is on mobile and responsive-design is false.
-if (!responsiveDesign && window.innerWidth <= 768) {
-  responsiveWarning.classList.add("show");
-}
+// Show or hide modal based on screen size.
+function checkResponsiveState() {
+  const small = window.innerWidth <= threshold;
 
-
-/***********************
-* MODE TOGGLE BEHAVIOR *
-***********************/
-
-// Get elements that change with the mode.
-const toggleModeBtn = document.getElementById("toggle-mode-btn");
-const portfolioLink = document.getElementById("portfolio-link");
-const body = document.body;
-
-let currentMode = "light-mode";
-
-// Function to apply mode.
-function applyMode(mode) {
-  body.classList.remove("light-mode", "dark-mode");
-  body.classList.add(mode);
-
-  currentMode = mode;
-
-  if (mode === "dark-mode") {
-    // Set dark mode styles.
-    toggleModeBtn.style.color = "rgb(245, 245, 245)";
-    toggleModeBtn.innerHTML = '<i class="bi bi-sun-fill"></i>';
-
-    portfolioLink.style.color = "rgb(245, 245, 245)";
-
-    responsiveWarning.style.backgroundColor = "rgb(2, 4, 8)";
+  if (!responsiveDesign && small) {
+    if (!responsiveWarning.open) {
+      responsiveWarning.showModal();
+      document.body.classList.add("overflow-hidden");
+    }
   } else {
-    // Set light mode styles.
-    toggleModeBtn.style.color = "rgb(2, 4, 8)";
-    toggleModeBtn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
-
-    portfolioLink.style.color = "rgb(2, 4, 8)";
-
-    responsiveWarning.style.backgroundColor = "rgb(245, 245, 245)";
+    if (responsiveWarning.open) {
+      responsiveWarning.close();
+      document.body.classList.remove("overflow-hidden");
+    }
   }
 }
 
-// Check and apply saved mode on page load
-let savedMode = localStorage.getItem("mode");
+// Initial check.
+checkResponsiveState();
 
-if (savedMode === null) {
-  savedMode = "light-mode"; // Default mode.
-}
-applyMode(savedMode);
-
-// Toggle mode and save preference.
-toggleModeBtn.addEventListener("click", function () {
-  let newMode;
-
-  if (body.classList.contains("light-mode")) {
-    newMode = "dark-mode";
-  } else {
-    newMode = "light-mode";
-  }
-
-  applyMode(newMode);
-
-  // Save choice.
-  localStorage.setItem("mode", newMode);
-});
+// Real-time resize detection.
+window.addEventListener("resize", checkResponsiveState);
 
 
 /******************
@@ -83,6 +41,16 @@ let stars = [];
 let totalStars = 8000;
 let galaxyArms = 3;
 let coreRadius = 25;
+
+const blackThemeToggle = document.querySelector('input.theme-controller[value="black"]');
+
+function isDarkTheme() {
+  if (!blackThemeToggle) {
+    return false;
+  }
+
+  return blackThemeToggle.checked;
+}
 
 // Setup the canvas and initialize the galaxy.
 function setup() {
@@ -129,7 +97,7 @@ function setup() {
 // Draw and animate the galaxy.
 function draw() {
   // Set the background depending on the current mode.
-  if (currentMode === "dark-mode") {
+  if (isDarkTheme()) {
     background(0, 0, 0, 20);
   } else {
     background(0, 0, 100, 20);
@@ -158,7 +126,7 @@ function draw() {
     translate(x, y, star.depthZ);
 
     // Adjust star color depending on the current mode.
-    if (currentMode === "dark-mode") {
+    if (isDarkTheme()) {
       fill(star.hue, star.saturation, star.brightness * twinkle, 100 * depthFade);
     } else {
       fill(30, 80, 60 * twinkle, 100 * depthFade);
@@ -187,7 +155,7 @@ function draw() {
   noStroke();
 
   // Adjust core color depending on the mode.
-  if (currentMode === "dark-mode") {
+  if (isDarkTheme()) {
     fill(255, 255, 255, 255);
   } else {
     fill(0, 0, 0, 255);
