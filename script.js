@@ -97,10 +97,13 @@ function setup() {
 // Draw and animate the galaxy.
 function draw() {
   // Set the background depending on the current mode.
+  blendMode(BLEND);
+  colorMode(RGB, 255);
+
   if (isDarkTheme()) {
     background(0, 0, 0, 20);
   } else {
-    background(0, 0, 100, 20);
+    background(255, 255, 255, 255);
   }
 
   ambientLight(255);
@@ -109,8 +112,13 @@ function draw() {
   translate(0, 0, 150);
   rotateX(PI / 3.5);
 
-  // Enable additive blending for glowing effect.
-  blendMode(ADD);
+  // Enable blending depending on the current mode.
+  if (isDarkTheme()) {
+    blendMode(ADD);
+  } else {
+    blendMode(MULTIPLY);
+  }
+
   colorMode(HSB, 360, 100, 100, 100);
 
   // Draw each star.
@@ -129,7 +137,7 @@ function draw() {
     if (isDarkTheme()) {
       fill(star.hue, star.saturation, star.brightness * twinkle, 100 * depthFade);
     } else {
-      fill(30, 80, 60 * twinkle, 100 * depthFade);
+      fill(star.hue, star.saturation, 100 - star.brightness * twinkle, 100 * depthFade);
     }
 
     sphere(star.starSize * depthFade);
